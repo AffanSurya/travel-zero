@@ -43,7 +43,7 @@ function Hero() {
             {/* Content */}
             <div className="max-w-3xl w-full text-center space-y-6">
                 <h1 className="text-xl md:text-5xl font-bold ">
-                    Plan Your Journey with <span className="text-primary">TravelZero</span>
+                    Plan Your Trip with <span className="text-primary">TravelZero</span>
                 </h1>
                 <p className="text-lg">From flights to hotels — your perfect trip planned in seconds.</p>
                 {/* Input Box */}
