@@ -53,7 +53,11 @@ function Hero() {
                             placeholder="Create a trip for Parise from New york"
                             className="w-full h-28 bg-transparent border-none focus-visible:ring-0 shadow-none resize-none"
                         />
-                        <Button size={"icon"} className="absolute bottom-6 right-6" onClick={() => onSend()}>
+                        <Button
+                            size={"icon"}
+                            className="absolute bottom-6 right-6 cursor-pointer"
+                            onClick={() => onSend()}
+                        >
                             <Send className="h-4 w-4" />
                         </Button>
                     </div>
