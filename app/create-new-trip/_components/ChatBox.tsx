@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
 import { Loader, Send } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import EmptyBoxState from "./EmptyBoxState";
 import GroupSizeUi from "./GroupSizeUi";
 import BudgetUi from "./BudgetUi";
@@ -18,36 +18,60 @@ type Messages = {
 
 function ChatBox() {
     const [messages, setMessages] = useState<Messages[]>([]);
-    const [userInput, setUserInput] = useState<string>();
+    const [userInput, setUserInput] = useState<string>("");
     const [loading, setLoading] = useState(false);
 
-    const onSend = async () => {
-        if (!userInput?.trim()) return;
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, loading]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+        });
+    };
+
+    const onSend = async (directInput?: string) => {
+        const inputToSend = directInput || userInput;
+
+        if (!inputToSend?.trim()) return;
 
         setLoading(true);
-        setUserInput("");
         const newMsg: Messages = {
             role: "user",
-            content: userInput,
+            content: inputToSend,
         };
+
+        if (!directInput) {
+            setUserInput("");
+        }
 
         setMessages((prev: Messages[]) => [...prev, newMsg]);
 
-        const result = await axios.post("/api/aimodel", {
-            messages: [...messages, newMsg],
-        });
+        try {
+            const result = await axios.post("/api/aimodel", {
+                messages: [...messages, newMsg],
+            });
 
-        setMessages((prev: Messages[]) => [
-            ...prev,
-            {
-                role: "assistant",
-                content: result?.data?.resp,
-                ui: result?.data?.ui,
-            },
-        ]);
+            setMessages((prev: Messages[]) => [
+                ...prev,
+                {
+                    role: "assistant",
+                    content: result?.data?.resp,
+                    ui: result?.data?.ui,
+                },
+            ]);
 
-        console.log(result.data);
-        setLoading(false);
+            console.log(result.data);
+        } catch (error) {
+            console.error("Error sending message:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const RenderGenerativeUi = (ui: string) => {
@@ -56,8 +80,7 @@ function ChatBox() {
             return (
                 <BudgetUi
                     onSelectedOption={(v: string) => {
-                        setUserInput(v);
-                        onSend();
+                        onSend(v);
                     }}
                 />
             );
@@ -66,8 +89,7 @@ function ChatBox() {
             return (
                 <GroupSizeUi
                     onSelectedOption={(v: string) => {
-                        setUserInput(v);
-                        onSend();
+                        onSend(v);
                     }}
                 />
             );
@@ -75,8 +97,7 @@ function ChatBox() {
             return (
                 <SelectDaysUi
                     onSelectedOption={(v: string) => {
-                        setUserInput(v);
-                        onSend();
+                        onSend(v);
                     }}
                 />
             );
@@ -104,13 +125,12 @@ function ChatBox() {
             {messages.length == 0 && (
                 <EmptyBoxState
                     onSelectOption={(v: string) => {
-                        setUserInput(v);
-                        onSend();
+                        onSend(v);
                     }}
                 />
             )}
             {/* display messages */}
-            <section className="flex-1 overflow-y-auto p-4">
+            <section ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 scroll-smooth">
                 {messages.map((msg: Messages, index) =>
                     msg.role == "user" ? (
                         <div className="flex justify-end mt-2" key={index}>
@@ -127,13 +147,18 @@ function ChatBox() {
                         </div>
                     )
                 )}
+
                 {loading && (
                     <div className="flex justify-start mt-2">
-                        <div className="max-w-lg bg-gray-100 text-black px-4 py-2 rounded-lg">
-                            <Loader className="animate-spin" />
+                        <div className="max-w-lg bg-gray-100 text-black px-4 py-2 rounded-lg flex items-center gap-2">
+                            <Loader className="animate-spin h-4 w-4" />
+                            <span className="text-sm text-gray-500">AI is thinking...</span>
                         </div>
                     </div>
                 )}
+
+                {/* Element untuk auto scroll */}
+                <div ref={messagesEndRef} />
             </section>
             {/* user input */}
             <section>
@@ -144,11 +169,13 @@ function ChatBox() {
                         onChange={(event) => setUserInput(event.target.value)}
                         value={userInput}
                         onKeyDown={handleKeyDown}
+                        disabled={loading}
                     />
                     <Button
                         size={"icon"}
                         className="absolute bottom-6 right-6 cursor-pointer"
                         onClick={() => onSend()}
+                        disabled={loading || !userInput?.trim()}
                     >
                         <Send className="h-4 w-4" />
                     </Button>
