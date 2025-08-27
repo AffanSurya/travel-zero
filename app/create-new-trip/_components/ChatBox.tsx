@@ -16,10 +16,22 @@ type Messages = {
     ui?: string;
 };
 
+type TripInfo = {
+    budget: string;
+    destination: string;
+    duration: string;
+    group_size: string;
+    hotels: any;
+    itinerary: any;
+    origin: string;
+};
+
 function ChatBox() {
     const [messages, setMessages] = useState<Messages[]>([]);
     const [userInput, setUserInput] = useState<string>("");
     const [loading, setLoading] = useState(false);
+    const [isFinal, setIsFinal] = useState(false);
+    const [tripDetail, setTripDetail] = useState<TripInfo>();
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -38,7 +50,7 @@ function ChatBox() {
     const onSend = async (directInput?: string) => {
         const inputToSend = directInput || userInput;
 
-        if (!inputToSend?.trim()) return;
+        // if (!inputToSend?.trim()) return;
 
         setLoading(true);
         const newMsg: Messages = {
@@ -55,18 +67,23 @@ function ChatBox() {
         try {
             const result = await axios.post("/api/aimodel", {
                 messages: [...messages, newMsg],
+                isFinal: isFinal,
             });
 
-            setMessages((prev: Messages[]) => [
-                ...prev,
-                {
-                    role: "assistant",
-                    content: result?.data?.resp,
-                    ui: result?.data?.ui,
-                },
-            ]);
+            console.log("trip", result.data);
+            !isFinal &&
+                setMessages((prev: Messages[]) => [
+                    ...prev,
+                    {
+                        role: "assistant",
+                        content: result?.data?.resp,
+                        ui: result?.data?.ui,
+                    },
+                ]);
 
-            console.log(result.data);
+            if (isFinal) {
+                setTripDetail(result?.data?.trip_plan);
+            }
         } catch (error) {
             console.error("Error sending message:", error);
         } finally {
@@ -102,7 +119,7 @@ function ChatBox() {
                 />
             );
         } else if (ui == "final") {
-            return <FinaleUi />;
+            return <FinaleUi viewTrip={() => console.log()} disable={!tripDetail} />;
         }
         return null;
     };
@@ -119,6 +136,21 @@ function ChatBox() {
             }
         }
     };
+
+    useEffect(() => {
+        const lastMsg = messages[messages.length - 1];
+
+        if (lastMsg?.ui == "final") {
+            setIsFinal(true);
+            setUserInput("Ok, Great!");
+        }
+    }, [messages]);
+
+    useEffect(() => {
+        if (isFinal && userInput) {
+            onSend();
+        }
+    }, [isFinal]);
 
     return (
         <div className="h-[80vh] flex flex-col">
