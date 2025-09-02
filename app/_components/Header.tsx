@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -40,15 +40,18 @@ function Header() {
                 ))}
             </div>
             {/* Get Started Button */}
-            {!user ? (
-                <SignInButton mode="modal">
-                    <Button className="cursor-pointer">Get Started</Button>
-                </SignInButton>
-            ) : (
-                <Link href={"/create-new-trip"}>
-                    <Button className="cursor-pointer">Create New Trip</Button>
-                </Link>
-            )}
+            <div className="flex items-center gap-5">
+                {!user ? (
+                    <SignInButton mode="modal">
+                        <Button className="cursor-pointer">Get Started</Button>
+                    </SignInButton>
+                ) : (
+                    <Link href={"/create-new-trip"}>
+                        <Button className="cursor-pointer">Create New Trip</Button>
+                    </Link>
+                )}
+                <UserButton />
+            </div>
         </div>
     );
 }
