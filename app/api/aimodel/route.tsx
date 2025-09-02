@@ -34,6 +34,12 @@ IMPORTANT: Only return the specified UI when asking the EXACT question type:
 - "How many days do you want to travel?" → ui: "tripDuration"
 - "What activities interest you?" → ui: null
 
+CRITICAL: When you have collected all required information (source, destination, group size, budget, duration, interests, preferences) and are about to ask user to confirm or proceed with generating the trip plan, you MUST return:
+{
+"resp": "Perfect! I have all the information needed. Let me create your personalized travel plan now.",
+"ui": "final"
+}
+
 Once all required information is collected, generate and return a **strict JSON response only** (no explanations or extra text) with following JSON schema:
 {
 "resp": "Text Response",

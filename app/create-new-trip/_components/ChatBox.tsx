@@ -11,7 +11,7 @@ import SelectDaysUi from "./SelectDaysUi";
 import FinaleUi from "./FinaleUi";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useUserDetail } from "@/app/provider";
+import { useTripDetail, useUserDetail } from "@/app/provider";
 import { v4 as uuidv4 } from "uuid";
 
 type Messages = {
@@ -20,14 +20,48 @@ type Messages = {
     ui?: string;
 };
 
-type TripInfo = {
+export type TripInfo = {
     budget: string;
     destination: string;
     duration: string;
     group_size: string;
-    hotels: any;
-    itinerary: any;
+    hotels: Hotel[];
+    itinerary: Itinerary[];
     origin: string;
+};
+
+export type Hotel = {
+    hotel_name: string;
+    hotel_address: string;
+    price_per_night: string;
+    hotel_image_url: string;
+    geo_coordinates: {
+        latitude: number;
+        longitude: number;
+    };
+    rating: number;
+    description: string;
+};
+
+export type Activity = {
+    place_name: string;
+    place_details: string;
+    place_image_url: string;
+    geo_coordinates: {
+        latitude: number;
+        longitude: number;
+    };
+    place_address: string;
+    ticket_pricing: string;
+    time_travel_each_location: string;
+    best_time_to_visit: string;
+};
+
+export type Itinerary = {
+    day: number;
+    day_plan: string;
+    best_time_to_visit_day: string;
+    activities: Activity[];
 };
 
 function ChatBox() {
@@ -38,6 +72,7 @@ function ChatBox() {
     const [tripDetail, setTripDetail] = useState<TripInfo>();
     const SaveTripDetail = useMutation(api.tripDetail.CreateTripDetail);
     const { userDetail, setUserDetail } = useUserDetail();
+    const { tripDetailInfo, setTripDetailInfo } = useTripDetail();
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -89,6 +124,8 @@ function ChatBox() {
 
             if (isFinal) {
                 setTripDetail(result?.data?.trip_plan);
+                setTripDetailInfo(result?.data?.trip_plan);
+
                 const tripId = uuidv4();
                 await SaveTripDetail({
                     tripDetail: result?.data?.trip_plan,
@@ -165,7 +202,7 @@ function ChatBox() {
     }, [isFinal]);
 
     return (
-        <div className="h-[80vh] flex flex-col">
+        <div className="h-[83vh] flex flex-col border shadow rounded-2xl p-4">
             {messages.length == 0 && (
                 <EmptyBoxState
                     onSelectOption={(v: string) => {

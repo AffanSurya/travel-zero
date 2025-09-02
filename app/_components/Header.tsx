@@ -23,7 +23,7 @@ const menuOptions = [
 function Header() {
     const { user } = useUser();
     return (
-        <div className="flex justify-between items-center p-4">
+        <div className="flex justify-between items-center p-4 shadow">
             {/* Logo */}
             <div className="flex gap-2 items-center">
                 <Image src={"/logo.svg"} alt="Logo" width={30} height={30} />
@@ -42,11 +42,11 @@ function Header() {
             {/* Get Started Button */}
             {!user ? (
                 <SignInButton mode="modal">
-                    <Button>Get Started</Button>
+                    <Button className="cursor-pointer">Get Started</Button>
                 </SignInButton>
             ) : (
                 <Link href={"/create-new-trip"}>
-                    <Button>Create New Trip</Button>
+                    <Button className="cursor-pointer">Create New Trip</Button>
                 </Link>
             )}
         </div>

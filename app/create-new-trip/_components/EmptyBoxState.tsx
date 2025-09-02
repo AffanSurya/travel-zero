@@ -8,12 +8,12 @@ function EmptyBoxState({ onSelectOption }: any) {
                 Start Planning New <strong className="text-primary">Trip</strong> Using AI
             </h2>
             <p className="text-center text-gray-400 mt-2">
-                Turn your dream trip into reality, minus the headache. Let our smart AI craft a unique
-                itinerary and suggest cool spots just for you. All you have to do is pack your bags and enjoy
-                every moment!
+                <p className="text-center text-gray-400 mt-2">
+                    Tell us your dreams, we'll plan the perfect trip!
+                </p>
             </p>
 
-            <div className="flex flex-col gap-5 mt-3">
+            <div className="flex flex-col gap-3 mt-3">
                 {suggestions.map((suggestions, index) => (
                     <div
                         key={index}

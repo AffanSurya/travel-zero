@@ -46,8 +46,10 @@ function GroupSizeUi({ onSelectedOption }: any) {
                     onClick={() => onSelectedOption(item.title + ": " + item.people)}
                 >
                     <div className={`text-3xl p-3 rounded-full ${item.color}`}>{item.icon}</div>
-                    <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
-                    <p className="text-sm text-gray-500 mt-1">{item.people}</p>
+                    <h2 className="text-sm font-semibold mt-2">{item.title}</h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                        {item.people.length > 5 ? item.people.slice(0, -6) : item.people}
+                    </p>
                 </div>
             ))}
         </div>
