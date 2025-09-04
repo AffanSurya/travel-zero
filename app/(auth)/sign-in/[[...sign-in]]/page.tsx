@@ -2,20 +2,21 @@ import { SignIn } from "@clerk/nextjs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Sign In - TravelZero | Access Your AI Trip Planner",
-    description: "Sign in to your TravelZero account and continue planning amazing trips with AI assistance. Access your saved trips and personalized recommendations.",
+    title: "Sign In",
+    description:
+        "Sign in to your TravelZero account and continue planning amazing trips with AI assistance. Access your saved trips and personalized recommendations.",
     keywords: [
         "sign in",
         "login",
         "travel account",
         "trip planner login",
         "access account",
-        "user authentication"
+        "user authentication",
     ],
     openGraph: {
         title: "Sign In to TravelZero | AI Trip Planner",
         description: "Access your personal travel planning dashboard and continue creating amazing journeys.",
-        url: "https://travelzero.vercel.app/sign-in",
+        url: "https://travel-zero.vercel.app/sign-in",
         siteName: "TravelZero",
         images: [
             {

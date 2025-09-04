@@ -2,8 +2,9 @@ import { SignUp } from "@clerk/nextjs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Sign Up - TravelZero | Start Your AI Travel Journey",
-    description: "Join TravelZero and start planning incredible trips with AI assistance. Create your free account and discover personalized travel experiences.",
+    title: "Sign Up",
+    description:
+        "Join TravelZero and start planning incredible trips with AI assistance. Create your free account and discover personalized travel experiences.",
     keywords: [
         "sign up",
         "register",
@@ -11,12 +12,13 @@ export const metadata: Metadata = {
         "join TravelZero",
         "travel registration",
         "AI trip planner signup",
-        "travel account creation"
+        "travel account creation",
     ],
     openGraph: {
         title: "Join TravelZero | AI-Powered Trip Planning",
-        description: "Create your free account and start planning amazing trips with AI assistance. Join thousands of happy travelers.",
-        url: "https://travelzero.vercel.app/sign-up",
+        description:
+            "Create your free account and start planning amazing trips with AI assistance. Join thousands of happy travelers.",
+        url: "https://travel-zero.vercel.app/sign-up",
         siteName: "TravelZero",
         images: [
             {

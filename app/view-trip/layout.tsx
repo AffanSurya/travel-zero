@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "View Trip Details - TravelZero",
+    title: "View Trip Details",
     description:
         "View your complete AI-generated travel itinerary with interactive maps, hotel recommendations, and detailed activity plans.",
     keywords: [

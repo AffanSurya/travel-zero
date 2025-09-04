@@ -3,7 +3,7 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Pricing - TravelZero",
+    title: "Pricing",
     description:
         "Choose the perfect plan for your travel needs. Get unlimited AI-powered trip planning, personalized itineraries, and premium travel recommendations.",
     keywords: [
