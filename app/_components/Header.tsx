@@ -29,7 +29,7 @@ function Header() {
         <div className="flex justify-between items-center p-4 shadow">
             {/* Logo */}
             <div className="flex gap-2 items-center">
-                <Image src={"/logo.svg"} alt="Logo" width={30} height={30} />
+                <Image src={"/Logo.svg"} alt="Logo" width={30} height={30} />
                 <h2 className="font-bold text-2xl ">TravelZero</h2>
             </div>
             {/* Menu Options */}

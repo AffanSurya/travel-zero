@@ -10,6 +10,9 @@ import { ArrowBigRight } from "lucide-react";
 import Image from "next/image";
 import MyTripCardItem from "./_components/MyTripCardItem";
 
+// Note: Metadata cannot be used in client components
+// This should be moved to a Server Component or layout if needed
+
 export type Trip = {
     tripId: any;
     tripDetail: TripInfo;

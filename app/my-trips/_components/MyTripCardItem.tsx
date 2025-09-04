@@ -25,7 +25,7 @@ function MyTripCardItem({ trip }: Props) {
         setPhotoUrl(result?.data);
     };
     return (
-        <Link href={"/view-trips/" + trip.tripId} className="p-5 rounded-2xl shadow">
+        <Link href={"/view-trip/" + trip.tripId} className="p-5 rounded-2xl shadow">
             <Image
                 src={photoUrl ? photoUrl : "/placeholder.jpg"}
                 alt={trip.tripId}

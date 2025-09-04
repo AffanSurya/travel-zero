@@ -34,7 +34,7 @@ function CreateNewTrip() {
                             {activeIndex == 0 ? <Plane /> : <Globe2 />}
                         </Button>
                     </TooltipTrigger>
-                    <TooltipContent>Swith Between Map and Trip</TooltipContent>
+                    <TooltipContent>Switch Between Map and Trip</TooltipContent>
                 </Tooltip>
             </div>
         </div>
