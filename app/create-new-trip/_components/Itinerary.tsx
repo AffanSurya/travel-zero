@@ -62,8 +62,8 @@ function Itinerary() {
                         src={"/trip.jpg"}
                         alt="trip"
                         width={"800"}
-                        height={"400"}
-                        className="w-full h-full object-cover rounded-3xl"
+                        height={"800"}
+                        className="w-full h-full object-cover rounded-2xl"
                     />
                 </div>
             )}
