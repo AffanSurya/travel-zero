@@ -11,9 +11,8 @@ import SelectDaysUi from "./SelectDaysUi";
 import FinaleUi from "./FinaleUi";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useTripDetail, useUserDetail } from "@/app/provider";
+import { useTripDetail, useUserDetail, useInitialMessage } from "@/app/provider";
 import { v4 as uuidv4 } from "uuid";
-import { useSearchParams } from "next/navigation";
 
 type Messages = {
     role: string;
@@ -74,24 +73,24 @@ function ChatBox() {
     const SaveTripDetail = useMutation(api.tripDetail.CreateTripDetail);
     const { userDetail, setUserDetail } = useUserDetail();
     const { tripDetailInfo, setTripDetailInfo } = useTripDetail();
-    const searchParams = useSearchParams();
-    const initialSearchParam = searchParams.get("message");
-    console.log(initialSearchParam);
+    const { initialMessage, setInitialMessage } = useInitialMessage();
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
-    const hasProcessedSearchParam = useRef(false);
-
-    useEffect(() => {
-        if (initialSearchParam && !hasProcessedSearchParam.current) {
-            hasProcessedSearchParam.current = true;
-            onSend(initialSearchParam);
-        }
-    }, [initialSearchParam]);
+    const hasProcessedContextMessage = useRef(false);
 
     useEffect(() => {
         scrollToBottom();
     }, [messages, loading]);
+
+    // Handle initial message from Hero component
+    useEffect(() => {
+        if (initialMessage && !hasProcessedContextMessage.current) {
+            hasProcessedContextMessage.current = true;
+            onSend(initialMessage);
+            setInitialMessage(null);
+        }
+    }, [initialMessage, messages.length]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({
@@ -103,7 +102,7 @@ function ChatBox() {
     const onSend = async (directInput?: string) => {
         const inputToSend = directInput || userInput;
 
-        // if (!inputToSend?.trim()) return;
+        if (!inputToSend?.trim()) return;
 
         setLoading(true);
         const newMsg: Messages = {

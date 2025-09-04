@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { ArrowDown, Globe2, Icon, Landmark, Plane, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useInitialMessage } from "../provider";
 
 export const suggestions = [
     {
@@ -29,32 +30,29 @@ export const suggestions = [
 function Hero() {
     const { user } = useUser();
     const router = useRouter();
-    const [userInput, setUserInput] = useState("");
+    const { setInitialMessage } = useInitialMessage();
+    const [textareaValue, setTextareaValue] = useState("");
 
-    const onSend = (suggestionInput?: string) => {
+    const onSend = () => {
         if (!user) {
             router.push("/sign-in");
             return;
         }
-
-        const inputToSend = suggestionInput || userInput;
-        // navigate to Create Trip Planner web page
-        router.push(`/create-new-trip?message=${inputToSend}`);
+        // Set initial message and navigate to Create Trip Planner web page
+        const messageToSend = textareaValue.trim() || "Create a trip for me";
+        setInitialMessage(messageToSend);
+        router.push("/create-new-trip");
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === "Enter") {
-            if (e.shiftKey) {
-                // Shift+Enter: Allow new line (default behavior)
-                return;
-            } else {
-                // Enter only: Send message
-                e.preventDefault(); // Prevent new line
-                onSend();
-            }
+    const onSuggestionClick = (suggestionTitle: string) => {
+        if (!user) {
+            router.push("/sign-in");
+            return;
         }
+        // Set the suggestion as initial message and navigate
+        setInitialMessage(suggestionTitle);
+        router.push("/create-new-trip");
     };
-
     return (
         <div className="mt-24 w-full flex justify-center">
             {/* Content */}
@@ -67,13 +65,11 @@ function Hero() {
                 <div>
                     <div className="border rounded-2xl p-4 relative">
                         <Textarea
-                            placeholder="Start typing here..."
+                            placeholder="Create a trip for Parise from New york"
                             className="w-full h-28 bg-transparent border-none focus-visible:ring-0 shadow-none resize-none"
-                            onChange={(event) => setUserInput(event.target.value)}
-                            value={userInput}
-                            onKeyDown={handleKeyDown}
+                            value={textareaValue}
+                            onChange={(e) => setTextareaValue(e.target.value)}
                         />
-
                         <Button
                             size={"icon"}
                             className="absolute bottom-6 right-6 cursor-pointer"
@@ -85,15 +81,15 @@ function Hero() {
                 </div>
                 {/* Suggestion List */}
                 <div className="flex gap-5">
-                    {suggestions.map((suggestions, index) => (
-                        <Button
-                            onClick={() => onSend(suggestions.title)}
+                    {suggestions.map((suggestion, index) => (
+                        <div
                             key={index}
                             className="flex items-center gap-2 border rounded-full p-2 cursor-pointer hover:bg-primary hover:text-white"
+                            onClick={() => onSuggestionClick(suggestion.title)}
                         >
-                            {suggestions.icon}
-                            <h2 className="text-sm">{suggestions.title}</h2>
-                        </Button>
+                            {suggestion.icon}
+                            <h2 className="text-sm">{suggestion.title}</h2>
+                        </div>
                     ))}
                 </div>
 
