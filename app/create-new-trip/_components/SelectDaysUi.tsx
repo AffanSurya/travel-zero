@@ -24,7 +24,6 @@ function SelectDaysUi({ onSelectedOption }: any) {
                 <h2 className="text-lg font-semibold text-gray-800 mb-2">
                     How many days do you want to travel?
                 </h2>
-                <p className="text-sm text-gray-500">Choose the duration for your perfect trip</p>
             </div>
 
             <div className="flex items-center gap-4">
@@ -33,7 +32,7 @@ function SelectDaysUi({ onSelectedOption }: any) {
                     size="icon"
                     onClick={decrementCount}
                     disabled={count <= 1}
-                    className="h-12 w-12 rounded-full border-gray-300 hover:border-primary hover:bg-primary hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="h-12 w-12 rounded-full cursor-pointer border-gray-300 hover:border-primary hover:bg-primary hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <Minus className="h-4 w-4" />
                 </Button>
@@ -55,7 +54,6 @@ function SelectDaysUi({ onSelectedOption }: any) {
             </div>
 
             <div className="text-center">
-                <p className="text-xs text-gray-400 mb-4">Recommended: 3-7 days for the best experience</p>
                 <Button
                     onClick={handleConfirm}
                     className="px-8 py-2 bg-primary hover:bg-primary/90 text-white rounded-xl transition-colors duration-200"

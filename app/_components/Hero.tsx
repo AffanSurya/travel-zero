@@ -53,6 +53,20 @@ function Hero() {
         setInitialMessage(suggestionTitle);
         router.push("/create-new-trip");
     };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter") {
+            if (e.shiftKey) {
+                // Shift+Enter: Allow new line (default behavior)
+                return;
+            } else {
+                // Enter only: Send message
+                e.preventDefault(); // Prevent new line
+                onSend();
+            }
+        }
+    };
+
     return (
         <div className="mt-24 w-full flex justify-center">
             {/* Content */}
@@ -65,10 +79,11 @@ function Hero() {
                 <div>
                     <div className="border rounded-2xl p-4 relative">
                         <Textarea
-                            placeholder="Create a trip for Parise from New york"
+                            placeholder="Start typing here..."
                             className="w-full h-28 bg-transparent border-none focus-visible:ring-0 shadow-none resize-none"
+                            onChange={(event) => setTextareaValue(event.target.value)}
                             value={textareaValue}
-                            onChange={(e) => setTextareaValue(e.target.value)}
+                            onKeyDown={handleKeyDown}
                         />
                         <Button
                             size={"icon"}
