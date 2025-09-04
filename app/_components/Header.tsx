@@ -28,10 +28,10 @@ function Header() {
     return (
         <div className="flex justify-between items-center p-4 shadow">
             {/* Logo */}
-            <div className="flex gap-2 items-center">
+            <Link href={"/"} className="flex gap-2 items-center">
                 <Image src={"/Logo.svg"} alt="Logo" width={30} height={30} />
                 <h2 className="font-bold text-2xl ">TravelZero</h2>
-            </div>
+            </Link>
             {/* Menu Options */}
             <div className="flex gap-8 items-center">
                 {menuOptions.map((menu, index) => (
