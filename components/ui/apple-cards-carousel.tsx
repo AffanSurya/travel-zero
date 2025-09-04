@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState, createContext, useContext } from "react";
+import React, { useEffect, useRef, useState, createContext, useContext, JSX } from "react";
 import { IconArrowNarrowLeft, IconArrowNarrowRight, IconX } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
@@ -109,7 +109,6 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
                                         duration: 0.5,
                                         delay: 0.2 * index,
                                         ease: "easeOut",
-                                        once: true,
                                     },
                                 }}
                                 key={"card" + index}
@@ -143,7 +142,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
 
 export const Card = ({ card, index, layout = false }: { card: Card; index: number; layout?: boolean }) => {
     const [open, setOpen] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
     const { onCardClose, currentIndex } = useContext(CarouselContext);
 
     useEffect(() => {
