@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const menuOptions = [
@@ -22,6 +23,8 @@ const menuOptions = [
 
 function Header() {
     const { user } = useUser();
+    const path = usePathname();
+
     return (
         <div className="flex justify-between items-center p-4 shadow">
             {/* Logo */}
@@ -45,6 +48,10 @@ function Header() {
                     <SignInButton mode="modal">
                         <Button className="cursor-pointer">Get Started</Button>
                     </SignInButton>
+                ) : path == "/create-new-trip" ? (
+                    <Link href={"/my-trips"}>
+                        <Button className="cursor-pointer">My Trips</Button>
+                    </Link>
                 ) : (
                     <Link href={"/create-new-trip"}>
                         <Button className="cursor-pointer">Create New Trip</Button>
