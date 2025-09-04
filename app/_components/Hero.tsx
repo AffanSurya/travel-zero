@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useUser } from "@clerk/nextjs";
 import { ArrowDown, Globe2, Icon, Landmark, Plane, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 export const suggestions = [
     {
@@ -29,15 +29,32 @@ export const suggestions = [
 function Hero() {
     const { user } = useUser();
     const router = useRouter();
+    const [userInput, setUserInput] = useState("");
 
-    const onSend = () => {
+    const onSend = (suggestionInput?: string) => {
         if (!user) {
             router.push("/sign-in");
             return;
         }
+
+        const inputToSend = suggestionInput || userInput;
         // navigate to Create Trip Planner web page
-        router.push("/create-new-trip");
+        router.push(`/create-new-trip?message=${inputToSend}`);
     };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter") {
+            if (e.shiftKey) {
+                // Shift+Enter: Allow new line (default behavior)
+                return;
+            } else {
+                // Enter only: Send message
+                e.preventDefault(); // Prevent new line
+                onSend();
+            }
+        }
+    };
+
     return (
         <div className="mt-24 w-full flex justify-center">
             {/* Content */}
@@ -50,9 +67,13 @@ function Hero() {
                 <div>
                     <div className="border rounded-2xl p-4 relative">
                         <Textarea
-                            placeholder="Create a trip for Parise from New york"
+                            placeholder="Start typing here..."
                             className="w-full h-28 bg-transparent border-none focus-visible:ring-0 shadow-none resize-none"
+                            onChange={(event) => setUserInput(event.target.value)}
+                            value={userInput}
+                            onKeyDown={handleKeyDown}
                         />
+
                         <Button
                             size={"icon"}
                             className="absolute bottom-6 right-6 cursor-pointer"
@@ -65,13 +86,14 @@ function Hero() {
                 {/* Suggestion List */}
                 <div className="flex gap-5">
                     {suggestions.map((suggestions, index) => (
-                        <div
+                        <Button
+                            onClick={() => onSend(suggestions.title)}
                             key={index}
                             className="flex items-center gap-2 border rounded-full p-2 cursor-pointer hover:bg-primary hover:text-white"
                         >
                             {suggestions.icon}
                             <h2 className="text-sm">{suggestions.title}</h2>
-                        </div>
+                        </Button>
                     ))}
                 </div>
 

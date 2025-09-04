@@ -13,6 +13,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useTripDetail, useUserDetail } from "@/app/provider";
 import { v4 as uuidv4 } from "uuid";
+import { useSearchParams } from "next/navigation";
 
 type Messages = {
     role: string;
@@ -73,9 +74,20 @@ function ChatBox() {
     const SaveTripDetail = useMutation(api.tripDetail.CreateTripDetail);
     const { userDetail, setUserDetail } = useUserDetail();
     const { tripDetailInfo, setTripDetailInfo } = useTripDetail();
+    const searchParams = useSearchParams();
+    const initialSearchParam = searchParams.get("message");
+    console.log(initialSearchParam);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
+    const hasProcessedSearchParam = useRef(false);
+
+    useEffect(() => {
+        if (initialSearchParam && !hasProcessedSearchParam.current) {
+            hasProcessedSearchParam.current = true;
+            onSend(initialSearchParam);
+        }
+    }, [initialSearchParam]);
 
     useEffect(() => {
         scrollToBottom();
