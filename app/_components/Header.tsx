@@ -16,8 +16,8 @@ const menuOptions = [
         path: "/pricing",
     },
     {
-        name: "Contact us",
-        path: "/contact-us",
+        name: "Contact Me",
+        path: "/contact-me",
     },
 ];
 

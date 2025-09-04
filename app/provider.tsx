@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { UserDetailContext } from "@/context/UserDetailContext";
 import { TripDetailContext, TripDetailContextType } from "@/context/TripDetailContext";
 import { TripInfo } from "./create-new-trip/_components/ChatBox";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 function Provider({
     children,
@@ -36,10 +37,12 @@ function Provider({
     return (
         <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>
             <TripDetailContext.Provider value={{ tripDetailInfo, setTripDetailInfo }}>
-                <div>
-                    <Header />
-                    {children}
-                </div>
+                <TooltipProvider>
+                    <div>
+                        <Header />
+                        {children}
+                    </div>
+                </TooltipProvider>
             </TripDetailContext.Provider>
         </UserDetailContext.Provider>
     );
